@@ -56,8 +56,8 @@ def main(argv):
   # associated with this model.
   print('Querying an Inception-like model.')
   data = nasbench.query(model_spec)
-  print(data)
-  print(nasbench.get_budget_counters())   # prints (total time, total epochs)
+  print(data['validation_accuracy'])
+  #print(nasbench.get_budget_counters())   # prints (total time, total epochs)
 
   # Get all metrics (all epoch lengths, all repeats) associated with this
   # model_spec. This should be used for dataset analysis and NOT for
