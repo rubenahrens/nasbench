@@ -18,12 +18,27 @@ This file is automatically run as part of `pip install -e .`
 """
 
 import setuptools
+from pkg_resources import DistributionNotFound, get_distribution
+
+
+def get_dist(pkgname):
+    try:
+        return get_distribution(pkgname)
+    except DistributionNotFound:
+        return None
+
+kw = {
+    'install_requires': []
+}
+
+if get_dist('tensorflow') is None:
+    kw['install_requires'].append('tensorflow-macos')
+else:
+    kw['install_requires'].append('tensorflow')
 
 setuptools.setup(
     name='nasbench',
     version='1.0',
     packages=setuptools.find_packages(),
-    install_requires=[
-        'tensorflow>=1.12.0',
-    ]
+    **kw
 )
