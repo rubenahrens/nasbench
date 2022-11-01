@@ -1,3 +1,4 @@
+from pyexpat import model
 from ioh import problem, OptimizationType, get_problem,logger
 import numpy as np
 from nasbench import api
@@ -70,7 +71,14 @@ def nas_ioh(x):
     
   if not nasbench.is_valid(model_spec):
     return 0
-  return nasbench.query(model_spec)["validation_accuracy"]
+  
+  tmp = nasbench.get_metrics_from_spec(model_spec)
+  epoch = tmp[1][108]
+  result = 0
+  for _ in epoch:
+    result += _["final_validation_accuracy"]
+  result = result / 3.0
+  return result
 
 problem.wrap_integer_problem(nas_ioh, "nas101",  optimization_type=OptimizationType.MAX)
 
