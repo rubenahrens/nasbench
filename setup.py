@@ -18,23 +18,22 @@ This file is automatically run as part of `pip install -e .`
 """
 
 import setuptools
-from pkg_resources import DistributionNotFound, get_distribution
+from sys import platform as pltform
+import platform
 
+architecture = platform.platform()
 
-def get_dist(pkgname):
-    try:
-        return get_distribution(pkgname)
-    except DistributionNotFound:
-        return None
 
 kw = {
     'install_requires': []
 }
 
-if get_dist('tensorflow') is None:
+if 'arm' in architecture and pltform == 'darwin':
+    # apple silicon architecture and MacOS
     kw['install_requires'].append('tensorflow-macos')
 else:
     kw['install_requires'].append('tensorflow')
+
 
 setuptools.setup(
     name='nasbench',
